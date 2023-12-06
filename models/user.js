@@ -20,12 +20,13 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: 'user',
 		},
+
 		image: String,
 		resetCode: {
 			data: String,
 			expiresAt: {
 				type: Date,
-				default: () => new Date(Date, now() + 10 * 60 * 1000),
+				default: () => new Date(Date.now() + 10 * 60 * 1000), // 10 minutes in milliseconds
 			},
 		},
 	},
