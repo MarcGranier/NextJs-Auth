@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: 'user',
 		},
-
 		image: String,
 		resetCode: {
 			data: String,

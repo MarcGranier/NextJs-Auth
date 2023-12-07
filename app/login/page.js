@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
-export default function Register() {
-	const [name, setName] = useState('');
+export default function Login() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -15,26 +15,19 @@ export default function Register() {
 		e.preventDefault();
 		try {
 			setLoading(true);
-			const response = await fetch(`${process.env.API}/register`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					name,
-					email,
-					password,
-				}),
+
+			const result = await signIn('credentials', {
+				redirect: false,
+				email,
+				password,
 			});
 
-			const data = await response.json();
-
-			if (!response.ok) {
-				toast.error(data.err);
+			if (result?.error) {
+				toast.error(result.error);
 				setLoading(false);
 			} else {
-				toast.success('User registered successfully');
-				router.push('/login');
+				toast.success('Logged in successfully');
+				router.push('/');
 			}
 		} catch (err) {
 			console.log(err);
@@ -46,16 +39,9 @@ export default function Register() {
 			<div className='container'>
 				<div className='row d-flex justify-content-center align-items-center vh-100'>
 					<div className='col-lg-5 shadow bg-light p-5'>
-						<h2 className='mb-4 text-center'>Register</h2>
+						<h2 className='mb-4 text-center'>Login</h2>
 
 						<form onSubmit={handleSubmit}>
-							<input
-								type='text'
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-								className='form-control mb-4'
-								placeholder='Enter your name'
-							/>
 							<input
 								type='email'
 								value={email}
@@ -73,7 +59,7 @@ export default function Register() {
 
 							<button
 								className='btn btn-primary btn-raised'
-								disabled={loading || !name || !email || !password}
+								disabled={loading || !email || !password}
 							>
 								{loading ? 'Please wait..' : 'Submit'}
 							</button>
