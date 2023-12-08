@@ -32,6 +32,23 @@ export const authOptions = {
 			},
 		}),
 	],
+	callbacks: {
+		async signIn({ user }) {
+			const { email, name, image } = user;
+			dbConnect();
+
+			let dbUser = await User.findOne({ email });
+
+			if (!dbUser) {
+				await User.create({
+					email,
+					name,
+					image,
+				});
+			}
+			return true;
+		},
+	},
 	secret: process.env.NEXTAUTH_SECRET,
 	pages: {
 		signIn: '/login',

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 
 export default function TopNav() {
-	const { data, status, loading } = useSession();
+	const { data, status } = useSession();
 	// console.log({ data, status });
 
 	return (
